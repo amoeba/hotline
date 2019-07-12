@@ -1,8 +1,16 @@
 # Hotline
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/hotline`. To experiment with that code, run `bin/console` for an interactive prompt.
+Ruby gem for programattic portions of the [Hotline](https://en.wikipedia.org/wiki/Hotline_Communications) protocol.
+I'm starting with the tracker client but may add more functionality in time.
 
-TODO: Delete this and the text above, and describe your gem
+Implementation status:
+
+- [ ] Server
+  - [ ] Server
+  - [ ] Client
+- [ ] Tracker
+  - [ ] Server
+  - [ ] Client
 
 ## Installation
 
@@ -22,7 +30,18 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+Note: This doesn't work yet!
+
+### Tracker Client
+
+```ruby
+require 'hotline/tracker/client'
+
+client = Hotline::Tracker::Client.new("localhost", "5000")
+client.servers.each do |server|
+    puts server.name
+end
+```
 
 ## Development
 
