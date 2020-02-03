@@ -17,8 +17,8 @@ class Server < BinData::Record
   uint16 :empty # Not used
 
   uint8 :name_len
-  string :name, :read_length => :name_len
+  string :name, read_length: :name_len
 
   uint8 :desc_len
-  string :description, :read_length => :desc_len
+  string :description, read_length: :desc_len
 end
