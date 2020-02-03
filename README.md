@@ -38,6 +38,7 @@ At this point, only the tracker client is written:
 require 'hotline/tracker/client'
 
 client = Hotline::Tracker::Client.new("hltracker.com")
+client.fetch
 client.servers.each do |server|
     puts server.name
 end

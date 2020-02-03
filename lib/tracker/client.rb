@@ -17,8 +17,10 @@ module Hotline
       def initialize(host = nil, port = 5498)
         @host = host
         @port = port
+      end
 
-        fetch
+      def to_s
+        "Hotline::Tracker::Client(host: #{@host}, port: #{@port})"
       end
 
       def socket
