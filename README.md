@@ -1,4 +1,4 @@
-# Hotline
+# hotline
 
 ![build](https://github.com/amoeba/hotline/workflows/Build/badge.svg)
 
