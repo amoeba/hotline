@@ -3,7 +3,7 @@ name: CI
 on: [push]
 
 jobs:
-  build:
+  Build:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -19,7 +19,7 @@ jobs:
         gem install bundler
         bundle install --jobs 4 --retry 3
         bundle exec rake
-  standard:
+  StandardRB:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
