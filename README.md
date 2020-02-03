@@ -1,3 +1,5 @@
+![build](https://github.com/amoeba/hotline/workflows/Build/badge.svg)
+
 # Hotline
 
 Ruby gem for programattic portions of the [Hotline](https://en.wikipedia.org/wiki/Hotline_Communications) protocol.
