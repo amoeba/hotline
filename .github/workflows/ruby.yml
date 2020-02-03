@@ -24,4 +24,6 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: standardrb checks
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       uses: amoeba/standardrb-action@v2
