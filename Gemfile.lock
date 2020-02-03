@@ -2,10 +2,12 @@ PATH
   remote: .
   specs:
     hotline (0.1.0)
+      bindata (~> 2.0)
 
 GEM
   remote: https://rubygems.org/
   specs:
+    bindata (2.4.4)
     minitest (5.11.3)
     rake (10.5.0)
 
@@ -19,4 +21,4 @@ DEPENDENCIES
   rake (~> 10.0)
 
 BUNDLED WITH
-   2.0.2
+   2.1.4

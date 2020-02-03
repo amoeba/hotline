@@ -10,7 +10,7 @@ Implementation status:
   - [ ] Client
 - [ ] Tracker
   - [ ] Server
-  - [ ] Client
+  - [x] Client
 
 ## Installation
 
@@ -30,14 +30,14 @@ Or install it yourself as:
 
 ## Usage
 
-Note: This doesn't work yet!
+At this point, only the tracker client is written:
 
 ### Tracker Client
 
 ```ruby
 require 'hotline/tracker/client'
 
-client = Hotline::Tracker::Client.new("localhost", "5000")
+client = Hotline::Tracker::Client.new("hltracker.com")
 client.servers.each do |server|
     puts server.name
 end
