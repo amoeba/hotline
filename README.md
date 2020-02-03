@@ -1,6 +1,6 @@
-![build](https://github.com/amoeba/hotline/workflows/Build/badge.svg)
-
 # Hotline
+
+![build](https://github.com/amoeba/hotline/workflows/Build/badge.svg)
 
 Ruby gem for programattic portions of the [Hotline](https://en.wikipedia.org/wiki/Hotline_Communications) protocol.
 I'm starting with the tracker client but may add more functionality in time.
