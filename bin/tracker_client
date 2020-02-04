@@ -1,0 +1,16 @@
+#!/usr/bin/env ruby
+
+require 'hotline'
+
+host = ARGV[0]
+
+if host.nil? || host.length <= 0
+  puts "Usage: tracker_client [tracker_url]"
+  exit(1)
+end
+
+client = Hotline::Tracker::Client.new(host)
+client.fetch
+client.servers.each do |s|
+  puts s.name
+end
