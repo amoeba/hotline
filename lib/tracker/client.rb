@@ -9,13 +9,19 @@ require_relative "exceptions"
 module Hotline
   module Tracker
     class Client
-      def initialize(host = nil, port = 5498)
+      attr_reader :version
+
+      def initialize(host = nil, port = 5498, version = 1)
         @host = host
         @port = port
+        @version = version.to_s
       end
 
       def to_s
-        "#{self.class.name}(host: #{@host}, port: #{@port})"
+        [
+          self.class.name,
+          "{host: #{@host}, port: #{@port}, version: #{@version}}"
+        ].join("")
       end
 
       def socket
@@ -27,12 +33,14 @@ module Hotline
       end
 
       def fetch
-        socket.write("HTRK\x00\x01")
+        # Build a magic number string from the version
+        magic = "HTRK\x00" + [version].pack("h")
 
-        # Check echo back from tracker
+        socket.write(magic)
         response = socket.recv 6
 
-        if response != "HTRK\x00\x01"
+        # Verify response, which should be an echo back
+        if response != magic
           raise InvalidTrackerResponse
         end
 
