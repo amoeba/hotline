@@ -20,7 +20,7 @@ module Hotline
       end
 
       def to_s
-        "Hotline::Tracker::Client(host: #{@host}, port: #{@port})"
+        "#{self.class.name}(host: #{@host}, port: #{@port})"
       end
 
       def socket

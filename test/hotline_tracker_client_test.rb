@@ -13,6 +13,7 @@ class HotlineTrackerClientTest < Minitest::Test
     client = Hotline::Tracker::Client.new("localhost")
 
     assert_instance_of String, client.to_s
+    assert_equal "Hotline::Tracker::Client(host: localhost, port: 5498)", client.to_s
   end
 
   def test_servers_are_empty_after_init
