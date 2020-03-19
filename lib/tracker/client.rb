@@ -9,11 +9,6 @@ require_relative "exceptions"
 module Hotline
   module Tracker
     class Client
-      @host = nil
-      @port = nil
-      @socket = nil
-      @servers = nil
-
       def initialize(host = nil, port = 5498)
         @host = host
         @port = port
