@@ -37,7 +37,7 @@ module Hotline
         magic = "HTRK\x00" + [version].pack("h")
 
         socket.write(magic)
-        response = socket.recv 6
+        response = socket.recv(6)
 
         # Verify response, which should be an echo back
         if response != magic
