@@ -40,8 +40,8 @@ module Hotline
         response = socket.recv(8)
         r = Response.read(response)
 
-        response = socket.recv(r.remaining)
         # Read the rest of the resposne
+        response = socket.recv(r.remaining)
 
         r.n.times do |i|
           s = Server.read(response)
