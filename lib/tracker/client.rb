@@ -51,13 +51,19 @@ module Hotline
         # Read the rest of the resposne
         response = socket.recv(r.remaining)
 
-        r.n.times do |i|
-          s = Server.read(response)
-          servers << s
+        # Make a separate copy in case we fail
+        new_servers = []
 
-          # TODO: Fix this to not re-allocate a string every loop?
-          response = response[(12 + s.name_len + s.desc_len)..(response.length - 1)]
+        # Track the position in the response for us to read each server from
+        cursor = 0
+
+        r.n.times do |i|
+          server = Server.read(response[cursor..(response.length - 1)])
+          new_servers << server
+          cursor += 12 + server.name_len + server.desc_len
         end
+
+        @servers = new_servers
       end
     end
   end
