@@ -15,6 +15,27 @@ module Hotline
         @host = host
         @port = port
         @version = version.to_s
+        @servers = []
+
+        @state = :BEGIN
+
+        @states = [
+          :BEGIN,
+          :RECV_MAGIC,
+          :RECV_RESPONSE,
+          :RECV_SERVERS,
+          :DONE
+        ]
+
+        @bytes_required = {
+          :BEGIN => 0,
+          :RECV_MAGIC => 6,
+          :RECV_RESPONSE => 8,
+          :RECV_SERVERS => 0, # 0? not sure what I wanna do here,
+          :DONE => 0
+        }
+
+        @buffer = nil
       end
 
       def to_s
@@ -32,38 +53,66 @@ module Hotline
         @servers ||= []
       end
 
+      def consume_last_message
+        @buffer.slice!(0...@bytes_required[@state])
+      end
+
       def fetch
-        # Build a magic number string from the version
-        magic = "HTRK\x00" + [version].pack("h")
+        response = nil
 
-        socket.write(magic)
-        response = socket.recv(6)
+        until @state == :DONE
+          @buffer = socket.recv(@bytes_required[@state]) unless @state == :BEGIN or @state == :DONE
 
-        # Verify response, which should be an echo back
-        if response != magic
-          raise InvalidTrackerResponse
+          case @state
+          when :BEGIN
+            magic = "HTRK\x00" + [version].pack("h")
+            socket.write(magic)
+
+            @state = :RECV_MAGIC
+          when :RECV_MAGIC
+            if (@buffer.length < @bytes_required[@state])
+              break
+            end
+
+            # Verify response, which should be an echo back
+            if @buffer[0..@bytes_required[@state] - 1] != magic
+              raise InvalidTrackerResponse
+            end
+
+            consume_last_message
+
+            @state = :RECV_RESPONSE
+          when :RECV_RESPONSE
+
+            if (@buffer.length < @bytes_required[@state])
+              next
+            end
+
+            response = Response.read(@buffer)
+            nservers = response[:n]
+
+            consume_last_message
+
+            # Dyanmically determine size of next recv?
+            @bytes_required[:RECV_SERVERS] = response[:remaining] - 4 # Why - 4?
+
+            @state = :RECV_SERVERS
+          when :RECV_SERVERS
+            if (@buffer.length < @bytes_required[@state])
+              next
+            end
+
+            cursor = 0
+
+            response[:n].times do |i|
+              server = Server.read(@buffer[cursor..(@buffer.length - 1)])
+              @servers << server
+              cursor += 12 + server.name_len + server.desc_len
+            end
+
+            @state = :DONE
+          end
         end
-
-        # Initial response from server
-        response = socket.recv(8)
-        r = Response.read(response)
-
-        # Read the rest of the resposne
-        response = socket.recv(r.remaining)
-
-        # Make a separate copy in case we fail
-        new_servers = []
-
-        # Track the position in the response for us to read each server from
-        cursor = 0
-
-        r.n.times do |i|
-          server = Server.read(response[cursor..(response.length - 1)])
-          new_servers << server
-          cursor += 12 + server.name_len + server.desc_len
-        end
-
-        @servers = new_servers
       end
     end
   end
