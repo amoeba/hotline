@@ -37,35 +37,37 @@ module Hotline
       end
 
       def fetch
+        handshake
+        header = read_header
+        @servers = read_servers(header)
+      end
+
+      private
+
+      def handshake
         request = Request.new(version: version.to_i)
         request.write(socket)
 
-        # Verify response, which should be an echo back
         response = Request.read(socket.read(6))
-        if response != request
-          raise InvalidTrackerResponse
-        end
+        raise InvalidTrackerResponse if response != request
+      end
 
-        # Initial response from server
-        response = socket.read(8)
-        r = Response.read(response)
+      def read_header
+        Response.read(socket.read(8))
+      end
 
-        # Read the rest of the resposne
-        response = socket.read(r.remaining)
-
-        # Make a separate copy in case we fail
-        new_servers = []
-
-        # Track the position in the response for us to read each server from
+      def read_servers(header)
+        data = socket.read(header.remaining)
+        servers = []
         cursor = 0
 
-        r.n.times do |i|
-          server = Server.read(response[cursor..])
-          new_servers << server
+        header.n.times do
+          server = Server.read(data[cursor..])
+          servers << server
           cursor += 12 + server.name_len + server.desc_len
         end
 
-        @servers = new_servers
+        servers
       end
     end
   end
