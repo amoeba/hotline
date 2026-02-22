@@ -16,14 +16,9 @@ Gem::Specification.new do |spec|
   spec.license = "MIT"
   spec.required_ruby_version = ">= 3.3.0"
 
-  if spec.respond_to?(:metadata)
-    spec.metadata["homepage_uri"] = spec.homepage
-    spec.metadata["source_code_uri"] = "https://github.com/amoeba/hotline"
-    spec.metadata["changelog_uri"] = "https://github.com/amoeba/hotline/releases"
-  else
-    raise "RubyGems 2.0 or newer is required to protect against " \
-      "public gem pushes."
-  end
+  spec.metadata["homepage_uri"] = spec.homepage
+  spec.metadata["source_code_uri"] = "https://github.com/amoeba/hotline"
+  spec.metadata["changelog_uri"] = "https://github.com/amoeba/hotline/releases"
 
   spec.files = Dir["lib/**/*", "bin/tracker_client", "LICENSE.txt", "README.md"]
   spec.bindir = "bin"
