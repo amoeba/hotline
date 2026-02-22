@@ -1,9 +1,8 @@
 # hotline
 
-![build](https://github.com/amoeba/hotline/workflows/Build/badge.svg)
+![CI](https://github.com/amoeba/hotline/actions/workflows/ruby.yml/badge.svg)
 
-Ruby gem for programattic portions of the [Hotline](https://en.wikipedia.org/wiki/Hotline_Communications) protocol.
-I'm starting with the tracker client but may add more functionality in time.
+An implementation of the Hotline protocols, currently just the tracker client.
 
 Implementation status:
 
@@ -54,7 +53,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/hotline. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
+Bug reports and pull requests are welcome on GitHub at https://github.com/amoeba//hotline. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
 
 ## License
 
