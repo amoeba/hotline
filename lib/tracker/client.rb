@@ -37,14 +37,12 @@ module Hotline
       end
 
       def fetch
-        # Build a magic number string from the version
-        magic = "HTRK\x00" + [version].pack("h")
-
-        socket.write(magic)
-        response = socket.read(6)
+        request = Request.new(version: version.to_i)
+        request.write(socket)
 
         # Verify response, which should be an echo back
-        if response != magic
+        response = Request.read(socket.read(6))
+        if response != request
           raise InvalidTrackerResponse
         end
 

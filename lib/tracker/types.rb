@@ -1,5 +1,11 @@
 # frozen_string_literal: true
 
+class Request < BinData::Record
+  endian :big
+  string :protocol, value: "HTRK"
+  uint16 :version
+end
+
 class Response < BinData::Record
   endian :big
 
