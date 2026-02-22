@@ -9,9 +9,12 @@ require_relative "exceptions"
 module Hotline
   module Tracker
     class Client
+      DEFAULT_PORT = 5498
+      RECV_TIMEOUT = 20
+
       attr_reader :version
 
-      def initialize(host = nil, port = 5498, version = 1)
+      def initialize(host = nil, port = DEFAULT_PORT, version = 1)
         @host = host
         @port = port
         @version = version.to_s
@@ -27,7 +30,7 @@ module Hotline
       def socket
         @socket ||= begin
           s = TCPSocket.new(@host, @port)
-          s.setsockopt(Socket::SOL_SOCKET, Socket::SO_RCVTIMEO, [20, 0].pack("l_2"))
+          s.setsockopt(Socket::SOL_SOCKET, Socket::SO_RCVTIMEO, [RECV_TIMEOUT, 0].pack("l_2"))
           s
         end
       end
@@ -48,12 +51,12 @@ module Hotline
         request = Request.new(version: version.to_i)
         request.write(socket)
 
-        response = Request.read(socket.read(6))
+        response = Request.read(socket.read(request.num_bytes))
         raise InvalidTrackerResponse if response != request
       end
 
       def read_header
-        Response.read(socket.read(8))
+        Response.read(socket.read(Response.new.num_bytes))
       end
 
       def read_servers(header)
@@ -64,7 +67,7 @@ module Hotline
         header.n.times do
           server = Server.read(data[cursor..])
           servers << server
-          cursor += 12 + server.name_len + server.desc_len
+          cursor += server.num_bytes
         end
 
         servers
