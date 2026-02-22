@@ -25,7 +25,11 @@ module Hotline
       end
 
       def socket
-        @socket ||= TCPSocket.new(@host, @port)
+        @socket ||= begin
+          s = TCPSocket.new(@host, @port)
+          s.setsockopt(Socket::SOL_SOCKET, Socket::SO_RCVTIMEO, [20, 0].pack("l_2"))
+          s
+        end
       end
 
       def servers
@@ -37,7 +41,7 @@ module Hotline
         magic = "HTRK\x00" + [version].pack("h")
 
         socket.write(magic)
-        response = socket.recv(6)
+        response = socket.read(6)
 
         # Verify response, which should be an echo back
         if response != magic
@@ -45,11 +49,11 @@ module Hotline
         end
 
         # Initial response from server
-        response = socket.recv(8)
+        response = socket.read(8)
         r = Response.read(response)
 
         # Read the rest of the resposne
-        response = socket.recv(r.remaining)
+        response = socket.read(r.remaining)
 
         # Make a separate copy in case we fail
         new_servers = []
