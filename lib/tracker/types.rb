@@ -2,7 +2,7 @@
 
 class Request < BinData::Record
   endian :big
-  string :protocol, value: "HTRK"
+  string :protocol, read_length: 4, value: "HTRK"
   uint16 :version
 end
 
@@ -11,6 +11,7 @@ class Response < BinData::Record
 
   uint16 :kind
   uint16 :remaining
+  uint16 :padding
   uint16 :n
 end
 
