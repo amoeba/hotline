@@ -62,7 +62,7 @@ module Hotline
         cursor = 0
 
         r.n.times do |i|
-          server = Server.read(response[cursor..(response.length - 1)])
+          server = Server.read(response[cursor..])
           new_servers << server
           cursor += 12 + server.name_len + server.desc_len
         end
